@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Koulen&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Koulen, Arial;
+}
+
+body{
+    background-color: #616161;
+}
+
+nav{
+    height: 60px;
+    border-bottom: 1px solid #000;
+    background: #424242;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+nav ul{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1%;
+}
+
+nav ul li ,nav ul a{
+    list-style-type: none;
+    color: #E4FFAB;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: none;
+}
+
+body h1{
+    color: rgba(255, 255, 255, 0.16);
+    text-align: center;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.5px;
+}
+
+body form{
+    display: flex;
+    flex-direction: column;
+    width: 22%;
+    margin: 20px auto;
+    height:60vh;
+    justify-content: space-between;
+}
+body section{
+    display: flex;
+    flex-direction: column;
+    width: 22%;
+    margin: 20px auto;
+    height:60vh;
+    justify-content: space-between;
+}
+
+.inputStylingRegister{
+    color: #3E3E3E;
+    font-size: 30px;
+    letter-spacing: 0.3px;
+    border-radius: 8px;
+    background: #D9D9D9;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    width: 364px;
+    height: 68px;
+    border: none;
+    padding-left: 1%;
+}
+
+.buttonStylingRegister{
+    color: #3E3E3E;
+    font-size: 30px;
+    letter-spacing: 0.3px;
+    border-radius: 8px;
+    background: #D9D9D9;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    width: 364px;
+    height: 68px;
+    border: none;
+    padding-left: 1%;
+    cursor: pointer; 
+    text-align: left;
+}
+
+body form input:nth-child(1){
+    transform: rotate(3.626deg);
+}
+body form input:nth-child(2){
+    transform: rotate(-1.54deg);
+}
+body form input:nth-child(3){
+    transform: rotate(3.74deg);
+}
+body form input:nth-child(4){
+    transform: rotate(-2.57deg);
+}
+body form input:nth-child(5){
+    transform: rotate(4.702deg);
+}
+
+.yellowCard{
+    position: absolute;
+    border: 1px solid #000;
+    background: rgba(226, 216, 124, 0.70);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    width: 135px;
+    height: 170px;
+    flex-shrink: 0;
+}
+
+.yellowCard h1{
+    color: #000;
+    font-family: Koulen;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.3px;
+}

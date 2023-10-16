@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<nav>
+    <ul>
+        <li><a href="{% url 'index' %}">STICKERS</a></li>
+        <li><a href="{% url 'friends' %}">FRIENDS</a></li>
+        <li><a href="{% url 'settings' %}">SETTINGS</a></li>
+        <li><a href="{% url 'login' %}">LOG OUT</a></li>
+    </ul>
+</nav>
+<h1>SELECT A FRIEND AND LEAVE HIM A NOTE</h1>
+<section>
+    <button class="buttonStylingRegister">ASK BEFORE STICKING NOTE</button>
+    <button class="buttonStylingRegister">MAKE BOARD PRIVATE</button>
+    <button class="buttonStylingRegister">CHANGE PASSWORD</button>
+    <button class="buttonStylingRegister">DELETE ACCOUNT</button>
+    <button class="buttonStylingRegister">BOARD COLOR</button>
+    <button class="buttonStylingRegister">LANGUAGE</button>
+</section>
+<div class="yellowCard" style="left: 120px; bottom: 146px;"><H1>BUY MILK!!</H1></div>
+    <div class="yellowCard" style="right: 100px; top: 148px;"><H1>THURSDAY 7:30PM MOVIE</H1></div>
+    <div class="yellowCard" style="left: 239px; top: 224px;"><H1 style="opacity: 0.5;">YOUR FIRST NOTE</H1></div>
+    <div class="yellowCard" style="left: 239px; top: 224px;"><H1 style="font-size: 200%; line-height: 50px; padding: 10px 0;">CLICK AGAIN TO DELETE</H1></div>
+{% endblock %}

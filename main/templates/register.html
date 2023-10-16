@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<nav>
+    <ul>
+        <li><a href="{% url 'index' %}">STICKERS</a></li>
+        <li><a href="{% url 'login' %}">LOG IN</a></li>
+    </ul>
+</nav>
+<h1>REGISTER TO LEAVE YOUR FRIENDS STICKY NOTES</h1>
+<form action="" method="POST">
+    <input type="text" placeholder="FIRST NAME" class="inputStylingRegister">
+    <input type="text" placeholder="LAST NAME" class="inputStylingRegister">
+    <input type="email" name="" id="" placeholder="EMAIL" class="inputStylingRegister">
+    <input type="password" name="" id="" placeholder="PASSWORD" class="inputStylingRegister">
+    <input type="password" name="" id="" placeholder="CONFIRM PASSWORD" class="inputStylingRegister">
+    <input type="submit" value="CREATE ACCOUNT" class="inputStylingRegister">
+</form>
+<div class="yellowCard" style="left: 120px; bottom: 146px;"><H1>BUY MILK!!</H1></div>
+    <div class="yellowCard" style="right: 100px; top: 148px;"><H1>THURSDAY 7:30PM MOVIE</H1></div>
+    <div class="yellowCard" style="left: 239px; top: 224px;"><H1 style="opacity: 0.5;">YOUR FIRST NOTE</H1></div>
+    <div class="yellowCard" style="left: 239px; top: 224px;"><H1 style="font-size: 200%; line-height: 50px; padding: 10px 0;">CLICK AGAIN TO DELETE</H1></div>
+{% endblock %}
