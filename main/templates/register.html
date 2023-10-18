@@ -8,12 +8,10 @@
     </ul>
 </nav>
 <h1>REGISTER TO LEAVE YOUR FRIENDS STICKY NOTES</h1>
-<form action="" method="POST">
-    <input type="text" placeholder="FIRST NAME" class="inputStylingRegister">
-    <input type="text" placeholder="LAST NAME" class="inputStylingRegister">
-    <input type="email" name="" id="" placeholder="EMAIL" class="inputStylingRegister">
-    <input type="password" name="" id="" placeholder="PASSWORD" class="inputStylingRegister">
-    <input type="password" name="" id="" placeholder="CONFIRM PASSWORD" class="inputStylingRegister">
+<h2>{{message}}</h2>
+<form action="/register" method="POST">
+    {% csrf_token %}
+    {{form}}
     <input type="submit" value="CREATE ACCOUNT" class="inputStylingRegister">
 </form>
 <div class="yellowCard" style="left: 120px; bottom: 146px;"><H1>BUY MILK!!</H1></div>

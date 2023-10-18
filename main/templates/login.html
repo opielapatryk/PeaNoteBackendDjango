@@ -8,9 +8,10 @@
     </ul>
 </nav>
 <h1>LOG IN TO LEAVE YOUR FRIENDS STICKY NOTES</h1>
+<h2>{{message}}</h2>
 <form action="" method="POST" style="height: 30vh;">
-    <input type="email" name="" id="" placeholder="EMAIL" class="inputStylingRegister">
-    <input type="password" name="" id="" placeholder="PASSWORD" class="inputStylingRegister">
+    {% csrf_token %}
+    {{form}}
     <input type="submit" value="LOG IN" class="inputStylingRegister">
 </form>
 <div class="yellowCard" style="left: 120px; bottom: 146px;"><H1>BUY MILK!!</H1></div>
