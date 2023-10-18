@@ -8,7 +8,6 @@
     </ul>
 </nav>
 <h1>REGISTER TO LEAVE YOUR FRIENDS STICKY NOTES</h1>
-<h2>{{message}}</h2>
 <form action="/register" method="POST">
     {% csrf_token %}
     {% for field in form %}
@@ -20,22 +19,8 @@
             </div>
         {% endif %}
     {% endfor %}
-    <!-- {{form}}
-    {{form.helptext}}
-    {{ form.field.help_text }} -->
-    <!-- {% for field in form %}
-    {{ field}}
-    
-    
-    
-    {% endfor %} -->
 
     <input type="submit" value="CREATE ACCOUNT">
-    <!-- {% for field in form %}
-
-        {{ field.help_text }}
-
-    {% endfor %} -->
     
 </form>
 <div class="yellowCard" style="left: 120px; bottom: 146px;"><H1>BUY MILK!!</H1></div>
