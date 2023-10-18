@@ -11,8 +11,32 @@
 <h2>{{message}}</h2>
 <form action="/register" method="POST">
     {% csrf_token %}
-    {{form}}
-    <input type="submit" value="CREATE ACCOUNT" class="inputStylingRegister">
+    {% for field in form %}
+        {{ field }}
+        
+        {% if field.errors %}
+            <div class="errorlist">
+                {{ field.errors }}
+            </div>
+        {% endif %}
+    {% endfor %}
+    <!-- {{form}}
+    {{form.helptext}}
+    {{ form.field.help_text }} -->
+    <!-- {% for field in form %}
+    {{ field}}
+    
+    
+    
+    {% endfor %} -->
+
+    <input type="submit" value="CREATE ACCOUNT">
+    <!-- {% for field in form %}
+
+        {{ field.help_text }}
+
+    {% endfor %} -->
+    
 </form>
 <div class="yellowCard" style="left: 120px; bottom: 146px;"><H1>BUY MILK!!</H1></div>
     <div class="yellowCard" style="right: 100px; top: 148px;"><H1>THURSDAY 7:30PM MOVIE</H1></div>
