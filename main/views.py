@@ -4,20 +4,19 @@ from django.urls import reverse, reverse_lazy
 from main.models import User
 from .forms import LoginForm, RegisterForm
 from django.views import generic 
-from django.contrib.auth import logout
-from django.contrib.auth.views import LoginView
-from django.views.generic import ListView
-from django.views.generic import TemplateView
+from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic import ListView, TemplateView
 
-def index(request):
-    if request.user.is_authenticated:
-        return render(request, 'index.html', context={})
-    else:
-        return HttpResponseRedirect(reverse("login"))
+class Index(TemplateView):
+    template_name = 'index.html'
 
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse("login"))
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse_lazy("login"))
+        return super().dispatch(request, *args, **kwargs)
+
+class Logout(LogoutView):
+    next_page = 'login'
 
 class Register(generic.CreateView):
     form_class = RegisterForm
@@ -42,35 +41,9 @@ class SearchFriend(ListView):
     template_name = 'search.html'
     model = User
 
-    # def get_queryset(self):
-    #     queryset = self.model.objects.all()
-    #     search_query = self.request.GET.get('q')
-    #     if search_query:
-    #         queryset = queryset.filter(email__icontains=search_query)
-    #     return queryset
-
-    # Query for requested email
-    # try:
-    #     email = Email.objects.get(user=request.user, pk=email_id)
-    # except Email.DoesNotExist:
-    #     return JsonResponse({"error": "Email not found."}, status=404)
-
-    # # Return email contents
-    # if request.method == "GET":
-    #     return JsonResponse(email.serialize())
-
-    # # Update whether email is read or should be archived
-    # elif request.method == "PUT":
-    #     data = json.loads(request.body)
-    #     if data.get("read") is not None:
-    #         email.read = data["read"]
-    #     if data.get("archived") is not None:
-    #         email.archived = data["archived"]
-    #     email.save()
-    #     return HttpResponse(status=204)
-
-    # # Email must be via GET or PUT
-    # else:
-    #     return JsonResponse({
-    #         "error": "GET or PUT request required."
-    #     }, status=400)
+    def get_queryset(self):
+        email = self.request.GET.get('email')
+        queryset = User.objects.filter(is_active=True)
+        if email:
+            queryset = queryset.filter(email=email)
+        return queryset 
