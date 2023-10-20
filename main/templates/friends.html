@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<script src="../static/friend_bubble.js"></script>
+
+
 <nav>
     <ul>
         <li><a href="{% url 'index' %}">STICKERS</a></li>
@@ -10,5 +13,10 @@
     </ul>
 </nav>
 <h1>SELECT A FRIEND AND LEAVE HIM A NOTE</h1>
-
+{% for user in object_list %}
+    <div class="friendBubble"><p>{{ user.first_name}} {{ user.last_name}}</p></div>
+    {% empty %} 
+    <h1>No friends yet. </h1>
+{% endfor %} 
 {% endblock %}
+

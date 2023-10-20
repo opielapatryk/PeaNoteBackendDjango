@@ -131,3 +131,15 @@ body section{
 label, br{
     display: none;
 }
+
+.friendBubble{
+    width: fit-content;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    position: absolute;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 1em;
+}

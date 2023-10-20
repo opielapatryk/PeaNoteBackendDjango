@@ -7,6 +7,8 @@ class User(AbstractUser):
     isPrivate = models.BooleanField(default=False)
     askBeforeStick = models.BooleanField(default=False)
     stickersOnBoard = models.ManyToManyField('Sticker', blank=True)
+    first_name = models.CharField(("first name"), max_length=150, blank=False)
+    last_name = models.CharField(("last name"), max_length=150, blank=False)
 
 class Sticker(models.Model):
     content = models.TextField(max_length=150)
