@@ -10,6 +10,9 @@ class User(AbstractUser):
     first_name = models.CharField(("first name"), max_length=150, blank=False)
     last_name = models.CharField(("last name"), max_length=150, blank=False)
 
+    def __str__(self):
+        return 'Email: ' + self.email
+    
 class Sticker(models.Model):
     content = models.TextField(max_length=150)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)

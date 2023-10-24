@@ -1,14 +1,88 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<script src="../static/create_note.js"></script>
+
+
 <nav>
     <ul>
         <li><a href="{% url 'index' %}">STICKERS</a></li>
         <li><a href="{% url 'friends' %}">FRIENDS</a></li>
-        <li><a href="{% url 'settings' %}">SETTINGS</a></li>
+        <li id="friendButton"><a >REMOVE FRIEND</a></li>
         <li><a href="{% url 'logout' %}">LOG OUT</a></li>
     </ul>
 </nav>
 <h1>CLICK EMPTY SPACE TO LEAVE A NOTE</h1>
+<div id="board">
+    <h1>{{friend_id.first_name}} {{friend_id.last_name}}</h1>
+    <h1 id="friend_id" style="visibility: hidden;">{{friend_id.id}}</h1>
+    {% for sticker in object_list %}
+    <div class="yellowCard"><h1>{{sticker.content}}</h1></div>
+    {% empty %} 
+    <h1>No stickers yet. </h1>
+    {% endfor %}
+</div>
 
+<script>
+    function getCookie(name) {
+        let cookieValue = null
+        if (document.cookie && document.cookie !== ''){
+            let cookies = document.cookie.split(';')
+            for(let i = 0; i< cookies.length; i++) {
+                let cookie = cookies[i].trim()
+                if(cookie.substring(0,name.length + 1)=== (name+'=')){
+                    cookieValue=decodeURIComponent(cookie.substring(name.length+1))
+                    break
+                }
+            }
+        }
+        return cookieValue
+    }
+    let csrfToken = getCookie('csrftoken');
+    let friendButton = document.querySelector('#friendButton')
+    friendButton.addEventListener('click',()=>{
+        let friendID = document.querySelector('#friend_id')
+        friendID = friendID.innerHTML
+        let friendUrl = `http://localhost:8000/api/users/${friendID}/`
+        
+        let userId = "{{user.id}}";
+        let url = `http://localhost:8000/api/users/${userId}/`
+
+        fetch(url)
+    .then((resp)=>resp.json())
+    .then(function(data){
+        let list = data.friends
+
+        if (list.includes(friendUrl)) {
+            let indexOfFriendInList = list.indexOf(friendUrl);
+            newlist = list.filter(friend => friend!==friendUrl)
+        }
+
+        const updatedUserData = { friends: newlist };
+        fetch(url,{
+            method:"PATCH",
+            headers:{
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify(updatedUserData),
+
+        })
+
+        .then((resp)=>{
+            if (resp.status === 200) {
+                console.log("Friend deleted successfully!");
+            } else {
+                console.error("Unexpected status code: " + resp.status);
+            }
+        })
+        .catch((err)=>{
+            console.error("Error:", err);
+        });
+    })
+    .catch((err)=>{
+        console.error("Error:", err);
+    });
+    })
+</script>
 {% endblock %}

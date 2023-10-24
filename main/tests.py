@@ -23,6 +23,7 @@ class UserTestCase(TestCase):
 
 class StickerTestCase(TestCase):
     def setUp(self):
+
         User.objects.create(username='joedoe', password='goodjoe', email='joe@doe.com')
         Sticker.objects.create(content='foo',creator=User.objects.get(username='joedoe'))
     
@@ -33,3 +34,4 @@ class StickerTestCase(TestCase):
 
         target.stickersOnBoard.add(sticker)
         self.assertEqual(target.stickersOnBoard.count(), 1)
+

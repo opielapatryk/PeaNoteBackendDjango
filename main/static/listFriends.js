@@ -1,22 +1,4 @@
-{% extends "layout.html" %}
-
-{% block body %}
-
-
-<nav>
-    <ul>
-        <li><a href="{% url 'index' %}">STICKERS</a></li>
-        <li><a href="{% url 'search' %}">ADD NEW FRIENDS</a></li>
-        <li><a href="{% url 'settings' %}">SETTINGS</a></li>
-        <li><a href="{% url 'logout' %}">LOG OUT</a></li>
-    </ul>
-</nav>
-<h1>SELECT A FRIEND AND LEAVE HIM A NOTE</h1>
-<div id="board">
-
-</div>
-<script>
-    let userId = "{{user.id}}";
+let userId = "{{user.id}}";
     let board = document.querySelector("#board");
     function buildFriends(){
         let url = `http://localhost:8000/api/users/${userId}`
@@ -65,10 +47,3 @@
         })
     }
     buildFriends()
-
-
-
-</script>
-
-{% endblock %}
-

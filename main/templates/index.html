@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<script src="../static/create_note.js"></script>
+<script src="../static/delete_note.js"></script>
+
 <nav>
     <ul>
         <li><a href="{% url 'index' %}">STICKERS</a></li>
@@ -9,6 +12,13 @@
         <li><a href="{% url 'logout' %}">LOG OUT</a></li>
     </ul>
 </nav>
-<h1>SELECT A FRIEND AND LEAVE HIM A NOTE</h1><h1> This is your board, friends can leave here notes for you</h1>
+<div id="board">
+    <h1>SELECT A FRIEND AND LEAVE HIM A NOTE</h1><h1> This is your board, friends can leave here notes for you</h1>
+    {% for sticker in object_list %}
+        <div class="yellowCard"><h1>{{sticker.content}}</h1></div>
+        {% empty %} 
+        <h1>No stickers yet. </h1>
+    {% endfor %}
+</div>
 
 {% endblock %}

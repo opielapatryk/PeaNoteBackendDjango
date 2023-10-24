@@ -16,8 +16,9 @@
 </form>
 
 <section id="users" style="height: max-content;"> 
-    {% for user in object_list %}
-    <div class="buttonStylingRegister">{{ user }} </div>
+    {% for friend in object_list %}
+    <div id="friendButton" class="buttonStylingRegister">{{ friend.email }}</div>
+    <div id="friendID" style="visibility: hidden;">{{ friend.id }}</div>
     {% empty %} 
     <div class="buttonStylingRegister">Search for another friends. </div>
     {% endfor %} 
@@ -28,4 +29,63 @@
     <div class="yellowCard" style="right: 100px; top: 148px;"><H1>THURSDAY 7:30PM MOVIE</H1></div>
     <div class="yellowCard" style="left: 239px; top: 224px;"><H1 style="opacity: 0.5;">YOUR FIRST NOTE</H1></div>
     <div class="yellowCard" style="left: 239px; top: 224px;"><H1 style="font-size: 200%; line-height: 50px; padding: 10px 0;">CLICK AGAIN TO DELETE</H1></div>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null
+            if (document.cookie && document.cookie !== ''){
+                let cookies = document.cookie.split(';')
+                for(let i = 0; i< cookies.length; i++) {
+                    let cookie = cookies[i].trim()
+                    if(cookie.substring(0,name.length + 1)=== (name+'=')){
+                        cookieValue=decodeURIComponent(cookie.substring(name.length+1))
+                        break
+                    }
+                }
+            }
+            return cookieValue
+        }
+        let csrfToken = getCookie('csrftoken');
+        let friendButton = document.querySelector('#friendButton')
+        friendButton.addEventListener('click',()=>{
+            let friendID = document.querySelector('#friendID')
+            friendID = friendID.innerHTML
+            let friendUrl = `http://localhost:8000/api/users/${friendID}/`
+            
+            let userId = "{{user.id}}";
+            let url = `http://localhost:8000/api/users/${userId}/`
+            
+            fetch(url)
+        .then((resp)=>resp.json())
+        .then(function(data){
+            let list = data.friends
+            if (!list.includes(friendUrl)) {
+                list.push(friendUrl);
+            }
+            const updatedUserData = { friends: list };
+            fetch(url,{
+                method:"PATCH",
+                headers:{
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify(updatedUserData),
+
+            })
+
+            .then((resp)=>{
+                if (resp.status === 200) {
+                    console.log("Friend added successfully!");
+                } else {
+                    console.error("Unexpected status code: " + resp.status);
+                }
+            })
+            .catch((err)=>{
+                console.error("Error:", err);
+            });
+        })
+        .catch((err)=>{
+            console.error("Error:", err);
+        });
+        })
+    </script>
 {% endblock %}
