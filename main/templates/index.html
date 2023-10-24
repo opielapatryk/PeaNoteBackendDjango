@@ -1,8 +1,6 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<script src="../static/create_note.js"></script>
-<script src="../static/delete_note.js"></script>
 
 <nav>
     <ul>
@@ -15,13 +13,68 @@
 <div id="board">
     <h1>SELECT A FRIEND AND LEAVE HIM A NOTE</h1><h1> This is your board, friends can leave here notes for you</h1>
     {% for sticker in object_list %}
-        <div class="yellowCard"><h1>{{sticker.content}}</h1></div>
+        <div class="yellowCard"><h1>{{sticker.content}}</h1><h1 style="visibility: hidden;">{{sticker.id}}</h1></div>
         {% empty %} 
         <h1>No stickers yet. </h1>
     {% endfor %}
 </div>
 <script>
-    // delete notes from your board
+    function getCookie(name) {
+        let cookieValue = null
+        if (document.cookie && document.cookie !== ''){
+            let cookies = document.cookie.split(';')
+            for(let i = 0; i< cookies.length; i++) {
+                let cookie = cookies[i].trim()
+                if(cookie.substring(0,name.length + 1)=== (name+'=')){
+                    cookieValue=decodeURIComponent(cookie.substring(name.length+1))
+                    break
+                }
+            }
+        }
+        return cookieValue
+    }
+    let csrfToken = getCookie('csrftoken');
+
+    const nav = document.querySelector("nav");
+    let yellowCard = document.querySelectorAll(".yellowCard");
+
     
+
+    document.addEventListener('DOMContentLoaded',()=>{
+        yellowCard.forEach(card => {
+            const random_left = Math.floor(Math.random() * (window.innerWidth - card.offsetWidth));
+            const random_top = Math.floor(Math.random() * (window.innerHeight - card.offsetHeight - nav.offsetHeight)) + nav.offsetHeight;
+            const width = card.offsetWidth;
+            const height = card.offsetHeight;
+            card.style.position = 'absolute';
+            card.style.top = random_top + "px";
+            card.style.left = random_left + "px";
+            card.addEventListener('click', () => deleteCard(card.children[1].innerHTML))
+        }); 
+    })
+
+    function deleteCard(stickerID){
+        let stickerURL = `http://localhost:8000/api/stickers/${stickerID}/`
+        console.log(stickerURL);
+        fetch(stickerURL,{
+            method: 'delete',
+            headers: {
+                'Content-Type':'application/json',
+                'X-CSRFToken':csrfToken,
+            },
+        })
+        .then((resp)=>{
+            if (resp.status === 204) {
+                console.log("Sticker deleted successfully");
+            } else {
+                console.error("Unexpected status code: " + resp.status);
+            }
+        })
+        .catch((err)=>{
+            console.error("Error:", err);
+        });
+    }
+
+
 </script>
 {% endblock %}
