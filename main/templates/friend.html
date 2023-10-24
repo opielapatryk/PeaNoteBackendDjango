@@ -1,14 +1,13 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<script src="../static/create_note.js"></script>
 
 
 <nav>
     <ul>
         <li><a href="{% url 'index' %}">STICKERS</a></li>
         <li><a href="{% url 'friends' %}">FRIENDS</a></li>
-        <li id="friendButton"><a >REMOVE FRIEND</a></li>
+        <li id="friendButton" style="cursor: pointer;"><a >REMOVE FRIEND</a></li>
         <li><a href="{% url 'logout' %}">LOG OUT</a></li>
     </ul>
 </nav>
@@ -16,6 +15,11 @@
 <div id="board">
     <h1>{{friend_id.first_name}} {{friend_id.last_name}}</h1>
     <h1 id="friend_id" style="visibility: hidden;">{{friend_id.id}}</h1>
+    <form action="" style="display: none;" id="createStickerForm">
+        <input type="text" name="stickerContent" id="stickerContent">
+        <input type="submit" value="Create" id="submitCreateStickerForm">
+    </form>
+    
     {% for sticker in object_list %}
     <div class="yellowCard"><h1>{{sticker.content}}</h1></div>
     {% empty %} 
@@ -39,14 +43,120 @@
         return cookieValue
     }
     let csrfToken = getCookie('csrftoken');
+
+    let userId = "{{user.id}}";
+    let url = `http://localhost:8000/api/users/${userId}/`
+
+
+    let friendID = document.querySelector('#friend_id').innerHTML
+    let friendUrl = `http://localhost:8000/api/users/${friendID}/`
+    let board = document.querySelector('#board')
+    let createStickerForm = document.querySelector('#createStickerForm')
+    let submitCreateStickerForm = document.querySelector('#submitCreateStickerForm');
+    let stickerContent = document.querySelector('#stickerContent');
+    let content;
+
+    let stickerID;
+
+board.addEventListener('click',()=>{
+        createStickerForm.style.display = 'flex'
+
+        //get click coordinates
+        //display this sticker
+
+        let x;
+    })
+
+
+    submitCreateStickerForm.addEventListener("click", (e)=>{
+        e.preventDefault()
+        content = stickerContent.value
+
+        let stickersURL = `http://localhost:8000/api/stickers/`
+
+        let bodyObj = {
+            "content": content,
+            "creator": url
+        }
+        
+        fetch(stickersURL,{
+            method:"POST",
+            headers:{
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify(bodyObj),
+
+        })
+        .then((resp)=>{
+            if (resp.status === 201) {
+                resp.json()
+                .then(data=>{
+                    stickerID = data.id
+                })
+            } else {
+                console.error("Unexpected status code: " + resp.status);
+            }
+        })
+        .catch((err)=>{
+            console.error("Error:", err);
+        });
+
+
+
+        fetch(friendUrl)
+    .then((resp)=>resp.json())
+    .then(function(data){
+        let list = data.stickersOnBoard
+        let stickerUrl = `http://localhost:8000/api/stickers/${stickerID}/`
+
+        if (!list.includes(stickerUrl)) {
+            list.push(stickerUrl);
+        }
+
+        const updatedUserData = { stickersOnBoard: list };
+        fetch(friendUrl,{
+            method:"PATCH",
+            headers:{
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify(updatedUserData),
+
+        })
+
+        .then((resp)=>{
+            if (resp.status === 200) {
+                console.log("Sticker added successfully!");
+            } else {
+                console.error("Unexpected status code: " + resp.status);
+            }
+        })
+        .catch((err)=>{
+            console.error("Error:", err);
+        });
+    })
+    .catch((err)=>{
+        console.error("Error:", err);
+    });
+
+    })
+
+    
+
+
+
+
+
+
+
+
+
     let friendButton = document.querySelector('#friendButton')
     friendButton.addEventListener('click',()=>{
-        let friendID = document.querySelector('#friend_id')
-        friendID = friendID.innerHTML
-        let friendUrl = `http://localhost:8000/api/users/${friendID}/`
         
-        let userId = "{{user.id}}";
-        let url = `http://localhost:8000/api/users/${userId}/`
+        
+        
 
         fetch(url)
     .then((resp)=>resp.json())
@@ -84,5 +194,22 @@
         console.error("Error:", err);
     });
     })
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+    const nav = document.querySelector("nav");
+    let yellowCard = document.querySelectorAll(".yellowCard");
+   
+    yellowCard.forEach(card => {
+        console.log(card);
+        const random_left = Math.floor(Math.random() * (window.innerWidth - card.offsetWidth));
+        const random_top = Math.floor(Math.random() * (window.innerHeight - card.offsetHeight - nav.offsetHeight)) + nav.offsetHeight;
+        const width = card.offsetWidth;
+        const height = card.offsetHeight;
+        card.style.position = 'absolute';
+        card.style.top = random_top + "px";
+        card.style.left = random_left + "px";
+    }); 
+})
 </script>
 {% endblock %}
