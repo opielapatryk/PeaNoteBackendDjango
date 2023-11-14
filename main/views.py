@@ -17,6 +17,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.views.generic import DeleteView
 from django.http import Http404
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 
 class Index(ListView):
     template_name = 'index.html'
@@ -55,6 +57,7 @@ class Register(generic.CreateView):
     template_name = 'register.html'
     success_url = reverse_lazy('login')
 
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class Login(LoginView):
     template_name = 'login.html'
     authentication_form = LoginForm
