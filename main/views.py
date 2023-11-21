@@ -19,7 +19,26 @@ from django.views.generic import DeleteView
 from django.http import Http404
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
+from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import get_token
+from rest_framework.authtoken.models import Token
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.contrib.auth import authenticate
 
+
+class CustomLoginView(APIView):
+    def post(self, request, *args, **kwargs):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key})
+        return Response({'error': 'Invalid Credentials'}, status=400)
+    
 class Index(ListView):
     template_name = 'index.html'
     model = User
@@ -92,3 +111,7 @@ class StickerViewSet(viewsets.ModelViewSet):
     queryset = Sticker.objects.all()
     serializer_class = StickerSerialzier
     
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    csrf_token = get_token(request)
+    return JsonResponse({"csrfToken": csrf_token})
