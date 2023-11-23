@@ -27,18 +27,31 @@ from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
-
+import logging
+from django.contrib.auth import authenticate, login, logout
 
 class CustomLoginView(APIView):
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')
         password = request.data.get('password')
+        
+        logger = logging.getLogger(__name__)
+        logger.info(f'Login attempt - Username: {username}, Password: {password}')
+
         user = authenticate(username=username, password=password)
+        
         if user:
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
-        return Response({'error': 'Invalid Credentials'}, status=400)
+            return Response({'Authorization': 'Token ' + token.key})
+        else:
+            logger.warning(f'Login failed for username: {username}')
+            return Response({'error': 'Invalid Credentials'}, status=400)
     
+class CustomLogoutView(APIView):
+    def post(self, request):
+        logout(request)
+        return Response({"success": "Successfully logged out"})
+
 class Index(ListView):
     template_name = 'index.html'
     model = User

@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import Settings, Register, Login, Friend, Friends, Index, Logout, SearchFriend, UserViewSet, StickerViewSet, get_csrf_token, CustomLoginView
+from .views import Settings, Register, Login, Friend, Friends, Index, Logout, SearchFriend, UserViewSet, StickerViewSet, get_csrf_token, CustomLoginView,CustomLogoutView
 from django.contrib.auth.decorators import login_required
 from rest_framework import routers
 
@@ -18,6 +18,7 @@ urlpatterns = [
     path("friends", login_required(Friends.as_view()), name="friends"),
     path("", Index.as_view(), name="index"),
     path("logout", Logout.as_view(), name="logout"),
+    path('custom_logout', CustomLogoutView.as_view(), name="custom_logout"),
     path('search', login_required(SearchFriend.as_view()), name="search"),
     path('get_csrf_token/', get_csrf_token, name='get_csrf_token'),   
 ]
