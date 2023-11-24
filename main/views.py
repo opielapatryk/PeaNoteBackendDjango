@@ -42,7 +42,7 @@ class CustomLoginView(APIView):
         
         if user:
             token, _ = Token.objects.get_or_create(user=user)
-            return Response({'Authorization': 'Token ' + token.key})
+            return Response({'Authorization': 'Token ' + token.key, 'user_id':user.id})
         else:
             logger.warning(f'Login failed for username: {username}')
             return Response({'error': 'Invalid Credentials'}, status=400)
