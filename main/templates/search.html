@@ -53,8 +53,8 @@
             
             let userId = "{{user.id}}";
             let url = `http://localhost:8000/api/users/${userId}/`
-            
-            fetch(url)
+            if (friendUrl !== url) {
+                fetch(url)
         .then((resp)=>resp.json())
         .then(function(data){
             let list = data.friends
@@ -86,6 +86,8 @@
         .catch((err)=>{
             console.error("Error:", err);
         });
+            }
+            
         })
     </script>
 {% endblock %}
