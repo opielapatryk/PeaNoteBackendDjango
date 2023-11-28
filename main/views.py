@@ -1,34 +1,30 @@
-from typing import Any
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, JsonResponse
+from django.urls import reverse_lazy
 from .models import User, Sticker
 from .forms import LoginForm, RegisterForm 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from .serializer import UserSerializer, StickerSerialzier
 from django.views import generic 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import ListView, TemplateView
-from django.contrib.auth import get_user_model
-from django.http import JsonResponse
-from django.views import View
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.views.generic import DeleteView
-from django.http import Http404
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
-from django.http import JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import get_token
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.contrib.auth import authenticate
 import logging
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
+
+class CustomRegisterView(APIView):
+    def post(self, request):
+        form = RegisterForm(request.data)
+
+        if form.is_valid():
+            user = form.save()
+            return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class CustomLoginView(APIView):
     def post(self, request, *args, **kwargs):
