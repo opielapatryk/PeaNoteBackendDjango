@@ -2,8 +2,8 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from .models import User, Sticker
 from .forms import LoginForm, RegisterForm 
-from rest_framework import viewsets, status
-from .serializer import UserSerializer, StickerSerialzier
+from rest_framework import viewsets, status, generics
+from .serializer import UserSerializer, StickerSerialzier, ChangePasswordSerializer
 from django.views import generic 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import ListView, TemplateView
@@ -15,6 +15,28 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import logging
 from django.contrib.auth import authenticate, logout
+from rest_framework.permissions import IsAuthenticated  
+
+class UpdatePasswordView(APIView):
+    model = User
+    # permission_classes = (IsAuthenticated)
+    
+    def get_object(self, queryset=None):
+        return self.request.user
+    
+    def put(self,request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            old_password = serializer.data.get("old_password")
+            if not self.object.check_password(old_password):
+                return Response({'old_password':['wrong password.']}, status=status.HTTP_400_BAD_REQUEST)
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CustomRegisterView(APIView):
     def post(self, request):
