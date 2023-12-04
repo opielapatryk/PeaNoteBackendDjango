@@ -5,7 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'friends','isPrivate', 'askBeforeStick', 'stickersOnBoard']
+        fields = ['id', 'first_name', 'last_name', 'email', 'friends','isPrivate', 'askBeforeStick', 'stickersOnBoard', 'pending']
 
 class StickerSerialzier(serializers.HyperlinkedModelSerializer):
     class Meta:

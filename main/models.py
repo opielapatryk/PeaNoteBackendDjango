@@ -6,7 +6,8 @@ class User(AbstractUser):
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
     isPrivate = models.BooleanField(default=False)
     askBeforeStick = models.BooleanField(default=False)
-    stickersOnBoard = models.ManyToManyField('Sticker', blank=True)
+    stickersOnBoard = models.ManyToManyField('Sticker', blank=True, related_name='stickers_on_board')
+    pending = models.ManyToManyField('Sticker', blank=True, related_name='pending_stickers')
     first_name = models.CharField(("first name"), max_length=150, blank=False)
     last_name = models.CharField(("last name"), max_length=150, blank=False)
 
